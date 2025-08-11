@@ -20,3 +20,6 @@
       shell: "mpstat 1 1 | awk '/Average/ && $NF ~ /[0-9.]+/ {print 100 - $NF}'"
       register: cpu_usage
     
+    - name: Get Memory utilization
+      shell: "free | awk '/Mem/ {printf(\"%.2f\", $3/$2 * 100.00) }'"
+      register: memory_usage

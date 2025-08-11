@@ -23,3 +23,14 @@
     - name: Get Memory utilization
       shell: "free | awk '/Mem/ {printf(\"%.2f\", $3/$2 * 100.00) }'"
       register: memory_usage
+
+    - name: Get disk utilization
+      shell: "df / | awk 'NR==2 {print $5}' | tr -d '%''"
+      register: disk_usage
+
+    - name: set metrics facts
+      set_fact:
+        vm_metrics:
+          cpu: "{{cpu_usage.stdout | float | round(2)}}"
+          memory: "{{memory_usage | float | round(2)}}"
+          disk: "{{disk_usage | float | round(2)}}"

@@ -1,0 +1,22 @@
+- name: Collect VM metrics
+  hosts: env_dev
+  become: true
+  gather_facts: true
+  tasks:
+    # For our ubuntu machines as well
+    - name: Install systat (for mpstat)
+      apt:
+        name: mpstat
+        state: present
+      when: ansible_os_family == "Debian"
+    
+    - name: Install systat (for mpstat)
+      apt:
+        name: mpstat
+        state: present
+      when: ansible_os_family == "RedHat"
+    
+    - name: Get CPU utilization for VM
+      shell: "mpstat 1 1 | awk '/Average/ && $NF ~ /[0-9.]+/ {print 100 - $NF}'"
+      register: cpu_usage
+    

@@ -1,10 +1,11 @@
 - name: Send the mail
-  host: localhost #master vartich code chalnar jr group dila asel tr host kade javoon tasks run honar or playbook process honar
-  become: false
+  hosts: localhost
+  become: true
   gather_facts: true
 
   vars_files:
     - group_vars/vars.yaml
+    - vault.yaml
 
   vars:
     # dict2items will convert to key value pairs
@@ -22,16 +23,16 @@
     subject: "VM metrics - {{ansible_date_time.date}} {{ansible_date_time.hour}} {{ansible_date_time.minute}}"
 
   tasks:
-    name: Send the mail
-    mail:
-      host: "{{ smtp_server }}"
-      port: "{{ smtp_port }}"
-      username: "{{smtp_username}}"
-      password: "{{smtp_password}}"
-      to: "{{ alert_recipient }}"
-      subject: "{{ subject }}"
-      body: "{{ lookup('template','../templates/template.html.j2')}}" 
-      subtype: html
+    - name: Send the mail
+      mail:
+        host: "{{ smtp_server }}"
+        port: "{{ smtp_port }}"
+        username: "{{ email_user }}"
+        password: "{{ email_pass }}"
+        to: "{{ alert_recipient }}"
+        subject: "{{ subject }}"
+        body: "{{ lookup('template','./templates/template.html.j2')}}" 
+        subtype: html
       
 
 

@@ -6,13 +6,13 @@
     # For our ubuntu machines as well
     - name: Install systat (for mpstat)
       apt:
-        name: mpstat
+        name: sysstat
         state: present
       when: ansible_os_family == "Debian"
     
     - name: Install systat (for mpstat)
       apt:
-        name: mpstat
+        name: sysstat
         state: present
       when: ansible_os_family == "RedHat"
     
@@ -31,6 +31,7 @@
     - name: set metrics facts
       set_fact:
         vm_metrics:
+          hostname: "{{ inventory_hostname }}"
           cpu: "{{cpu_usage.stdout | float | round(2)}}"
-          memory: "{{memory_usage | float | round(2)}}"
-          disk: "{{disk_usage | float | round(2)}}"
+          mem: "{{memory_usage.stdout | float | round(2)}}"
+          disk: "{{disk_usage.stdout | float | round(2)}}"

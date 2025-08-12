@@ -1,1 +1,2 @@
 - import playbook: collect-metrics.yaml
+- import playbook: send-mail.yaml

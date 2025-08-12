@@ -1,0 +1,40 @@
+- name: Send the mail
+  host: localhost #master vartich code chalnar jr group dila asel tr host kade javoon tasks run honar or playbook process honar
+  become: false
+  gather_facts: true
+
+  vars_files:
+    - group_vars/vars.yaml
+
+  vars:
+    # dict2items will convert to key value pairs
+    # selectattr() -> this will filter out those vms where value.vm_metrics is defined
+    # It will collect the vm_metrics values and convert into list
+    collected_metrics: >-
+    {{
+      hostvars |
+      dict2items |
+      selectattr('value.vm_metrics','defined') |
+      map(attribute = "value.vm_metrics")|
+      list
+    }}
+    timestamp: "{{ansible_date_time.date}} {{ansible_date_time.time}}"
+    subject: "VM metrics - {{ansible_date_time.date}} {{ansible_date_time.hour}} {{ansible_date_time.minute}}"
+
+    tasks:
+    name: Send the mail
+    mail:
+      host: "{{ smtp_server }}"
+      port: "{{ smtp_port }}"
+      username: "{{smtp_username}}"
+      password: "{{smtp_password}}"
+      to: "{{ alert_recipient }}"
+      subject: "{{ subject }}"
+      body: "{{ lookup('template','../templates/template.html.j2')}}" 
+      subtype: html
+      
+
+
+  
+
+

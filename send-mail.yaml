@@ -11,13 +11,13 @@
     # selectattr() -> this will filter out those vms where value.vm_metrics is defined
     # It will collect the vm_metrics values and convert into list
     collected_metrics: >-
-    {{
-      hostvars |
-      dict2items |
-      selectattr('value.vm_metrics','defined') |
-      map(attribute = 'value.vm_metrics')|
-      list
-    }}
+      {{
+        hostvars |
+        dict2items |
+        selectattr('value.vm_metrics','defined') |
+        map(attribute = 'value.vm_metrics')|
+        list
+      }}
     timestamp: "{{ansible_date_time.date}} {{ansible_date_time.time}}"
     subject: "VM metrics - {{ansible_date_time.date}} {{ansible_date_time.hour}} {{ansible_date_time.minute}}"
 

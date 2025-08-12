@@ -15,7 +15,7 @@
       hostvars |
       dict2items |
       selectattr('value.vm_metrics','defined') |
-      map(attribute = "value.vm_metrics")|
+      map(attribute = 'value.vm_metrics')|
       list
     }}
     timestamp: "{{ansible_date_time.date}} {{ansible_date_time.time}}"
